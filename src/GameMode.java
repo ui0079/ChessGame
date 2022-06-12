@@ -44,7 +44,7 @@ public class GameMode extends JPanel {
 	int[][] grid_color = new int[XMAX][YMAX];
 
 	int[][] trap = new int[XMAX][YMAX];// 1=即死,2=キャラ変更
-	Text ttr = new Text(50, 40, "1Pは青色の場所のどこかにキングを置いてください ", new Font("SansSerif", Font.BOLD, 22));
+	Text ttr = new Text(50, 40, "1Pは青色の場所のどこかにキングを置いてください ", new Font("SansSerif", Font.PLAIN, 22));
 
 	int[][] move_area = { { 1, 1, 1, 1, 1, 1, 1, 1 }, { 1, 6, 1, 6, 6, 1, 6, 1 }, { 0, 1, 0, 1, 1, 0, 1, 0 },
 			{ 2, 0, 2, 0, 0, 2, 0, 2 } };
@@ -284,8 +284,11 @@ public class GameMode extends JPanel {
 			board[x][y] = 0;
 			trap[x][y] = 0;
 		} else if (trap[x][y] == 2) {// キャラ変更
-			int rand_character = rnd.nextInt(3) + 2;
-			board[x][y] = player * 4 + rand_character;
+			int rand_character = player * 3 + rnd.nextInt(3) + 2;
+			while(rand_character == character){
+				rand_character = player * 3 + rnd.nextInt(3) + 2;
+			}
+			board[x][y] = rand_character;
 			trap[x][y] = 0;
 			ttr.setText(character_name[rand_character - 1] + "に変身した");
 			Error_Flag = false;
@@ -304,9 +307,9 @@ public class GameMode extends JPanel {
 				count = 22;
 			}
 		} else {
+			board[x][y] = character;
 			PaintGrid(x, y);
 			SetImage2Grid(x, y);
-			board[x][y] = character;
 		}
 
 		System.out.printf("%d,%d,%d\n", board[x][y], x, y);
